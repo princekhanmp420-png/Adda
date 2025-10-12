@@ -16,7 +16,7 @@ module.exports = {
 			session4: "tối",
 			leaveType1: "tự rời",
 			leaveType2: "bị kick",
-			defaultLeaveMessage: "{userName} তোমারে সম্মানের সহিত {type} গ্রুপ থেকে রিমুভ করা হলো"
+			defaultLeaveMessage: "{userName}{type}"
 		},
 		en: {
 			session1: "morning",
@@ -25,7 +25,7 @@ module.exports = {
 			session4: "evening",
 			leaveType1: "left",
 			leaveType2: "was kicked from",
-			defaultLeaveMessage: "কিরে {userName} {type} তোর কি সমস্যা আমার বস প্রিন্স রে না বলে লিভ নিবি না"
+			defaultLeaveMessage: "{userName} {type}"
 		}
 	},
 
