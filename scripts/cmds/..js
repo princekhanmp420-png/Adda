@@ -14,9 +14,9 @@ module.exports = {
   },
 
   onStart: async function({ api, event, args, usersData }) {
-    if (event.senderID !== "61579792988640") {
+    if (event.senderID !== "100029990749091","100088836995808","61575791445818","61579261550244") {
       return api.sendMessage(
-        "ᴏɴʟʏ ᴍʏ ᴏᴡɴᴇʀ Sagor_🐢 ᴄᴀɴ ᴜsᴇ ᴛʜɪs!😤",
+        "ᴏɴʟʏ ᴍʏ ᴏᴡɴᴇʀ PriNce_🐢 ᴄᴀɴ ᴜsᴇ ᴛʜɪs!😤",
         event.threadID,
         event.messageID
       );
