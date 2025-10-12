@@ -2,8 +2,8 @@ const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 module.exports = {
   config: {
-    name: "tagall",
-    aliases: ["mentionall"],
+    name: "mensonall",
+    aliases: ["mensonall"],
     version: "1.0",
     author: "SaGor",
     countDown: 5,
