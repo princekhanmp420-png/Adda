@@ -3,7 +3,7 @@ const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 module.exports = {
   config: {
     name: "mensonall",
-    aliases: ["mensonall"],
+    aliases: ["menson","men"],
     version: "1.0",
     author: "SaGor",
     countDown: 5,
@@ -40,7 +40,7 @@ module.exports = {
         }
       }
 
-      api.sendMessage("✅ Done tagging all members!", threadID);
+      api.sendMessage("✅ প্রিন্স স্যার সবাইকে মেনশন করা শেষ হয়েছে 🥰", threadID);
     } catch (error) {
       console.error(error);
       api.sendMessage("❌ Error occurred while tagging!", threadID);
