@@ -30,13 +30,11 @@ module.exports = {
       const randomReply = angryReplies[Math.floor(Math.random() * angryReplies.length)];
 
       const response = 
-`╔═══🔥🤖🔥═══╗
-   𝘽𝙊𝙏 𝙈𝙊𝘿𝙀: 𝘼𝙉𝙂𝙍𝙔 😡
-╚═══🔥🤖🔥═══╝
+`
 
 ${randomReply}
 
-⚡ এখন চুপচাপ থাকো, না হলে রোবট রেগে যাবে! 😤`;
+`;
 
       return api.sendMessage(response, event.threadID, event.messageID);
     }
