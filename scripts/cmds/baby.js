@@ -30,7 +30,7 @@ module.exports.onStart = async ({
 
     try {
         if (!args[0]) {
-            const ran = ["Bolo baby😊🥀", "Hum go jan😇", "Achi sona🙈", "Hum jan bolo achi🥰"];
+            const ran = ["Bolo baby😊🥀", "Hum go jan😇🥀", "Achi sona🙈", "Hum jan bolo achi🥰🥀"];
             return api.sendMessage(ran[Math.floor(Math.random() * ran.length)], event.threadID, event.messageID);
         }
 
