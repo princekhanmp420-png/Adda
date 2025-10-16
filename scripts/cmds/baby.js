@@ -4,140 +4,172 @@ const simsim = "https://simsimi.cyberbot.top";
 module.exports = {
   config: {
     name: "baby",
-    version: "1.0.0",
-    author: "ULLASH x GPT-5",
+    aliases: ["bby", "jan", "baby", "xan"],
+    version: "1.0.5",
+    author: "ULLASH | Converted by SaGor",
     countDown: 0,
     role: 0,
-    category: "fun",
-    shortDescription: "Cute AI Baby chatbot 😚",
-    longDescription: "Cute AI chatbot — chat, teach & have fun! 💬",
+    shortDescription: "Cute AI Baby Chatbot 😺",
+    longDescription: "Chat, teach, edit, and remove messages for a smart baby chatbot",
+    category: "chat",
     guide: {
-      en: `
-{p}baby [message] → সাধারণভাবে কথা বলবে
-{p}teach প্রশ্ন - উত্তর → নতুন কিছু শেখাও
-{p}remove প্রশ্ন - উত্তর → শেখানো মুছে ফেলো
-{p}edit প্রশ্ন - পুরনো উত্তর - নতুন উত্তর → শেখানো পরিবর্তন করো
-{p}list → মোট শেখা প্রশ্ন দেখাও`
+      en: "{pn} teach [question] - [reply]\n{pn} edit [question] - [oldReply] - [newReply]\n{pn} remove [question] - [reply]\n{pn} list"
     }
   },
 
-  // 🟢 সাধারণভাবে কমান্ড দিয়ে ব্যবহার
-  onStart: async function({ message, args, event, usersData }) {
-    try {
-      const senderID = event.senderID;
-      const senderName = await usersData.getName(senderID);
-      const rawQuery = args.join(" ");
-      const query = rawQuery.toLowerCase();
+  onStart: async function ({ api, event, args, usersData, threadsData }) {
+    const uid = event.senderID;
+    const senderName = await usersData.getName(uid);
+    const query = args.join(" ").toLowerCase();
 
+    try {
       if (!query) {
-        return message.reply("বলো বেবি 💬");
+        const random = ["Bolo baby 💬", "হুম? বলো 😺"];
+        const reply = random[Math.floor(Math.random() * random.length)];
+        return api.sendMessage(reply, event.threadID, (err, info) => {
+          if (!err)
+            global.GoatBot.onReply.set(info.messageID, {
+              commandName: module.exports.config.name,
+              messageID: info.messageID,
+              author: uid
+            });
+        });
       }
 
-      const command = args[0].toLowerCase();
+      const command = args[0]?.toLowerCase();
 
-      // 🧩 remove
       if (["remove", "rm"].includes(command)) {
-        const parts = rawQuery.replace(/^(remove|rm)\s*/i, "").split(" - ");
-        if (parts.length < 2) return message.reply("Use: remove প্রশ্ন - উত্তর");
+        const parts = query.replace(/^(remove|rm)\s*/i, "").split(" - ");
+        if (parts.length < 2) return api.sendMessage("⚙️ Use: remove [Question] - [Reply]", event.threadID);
         const [ask, ans] = parts.map(p => p.trim());
         const res = await axios.get(`${simsim}/delete?ask=${encodeURIComponent(ask)}&ans=${encodeURIComponent(ans)}`);
-        return message.reply(res.data.message);
+        return api.sendMessage(res.data.message, event.threadID);
       }
 
-      // 📜 list
       if (command === "list") {
         const res = await axios.get(`${simsim}/list`);
         if (res.data.code === 200) {
-          return message.reply(
-            `♾ Total Questions Learned: ${res.data.totalQuestions}\n★ Total Replies: ${res.data.totalReplies}\n🧠 Developer: ${res.data.author}`
+          return api.sendMessage(
+            `♾ Total Questions: ${res.data.totalQuestions}\n★ Total Replies: ${res.data.totalReplies}\n☠︎︎ Developer: ${res.data.author}`,
+            event.threadID
           );
-        } else {
-          return message.reply(`Error: ${res.data.message || "Failed to fetch list"}`);
         }
+        return api.sendMessage(`❌ ${res.data.message || "Failed to fetch list"}`, event.threadID);
       }
 
-      // ✏️ edit
       if (command === "edit") {
-        const parts = rawQuery.replace(/^edit\s*/i, "").split(" - ");
-        if (parts.length < 3) return message.reply("Use: edit প্রশ্ন - পুরনো উত্তর - নতুন উত্তর");
+        const parts = query.replace(/^edit\s*/i, "").split(" - ");
+        if (parts.length < 3) return api.sendMessage("⚙️ Use: edit [Question] - [OldReply] - [NewReply]", event.threadID);
         const [ask, oldReply, newReply] = parts.map(p => p.trim());
         const res = await axios.get(`${simsim}/edit?ask=${encodeURIComponent(ask)}&old=${encodeURIComponent(oldReply)}&new=${encodeURIComponent(newReply)}`);
-        return message.reply(res.data.message);
+        return api.sendMessage(res.data.message, event.threadID);
       }
 
-      // 🧠 teach
       if (command === "teach") {
-        const parts = rawQuery.replace(/^teach\s*/i, "").split(" - ");
-        if (parts.length < 2) return message.reply("Use: teach প্রশ্ন - উত্তর");
+        const parts = query.replace(/^teach\s*/i, "").split(" - ");
+        if (parts.length < 2) return api.sendMessage("⚙️ Use: teach [Question] - [Reply]", event.threadID);
         const [ask, ans] = parts.map(p => p.trim());
-        const threadInfo = await message.getThreadInfo();
-        const groupName = threadInfo.threadName || "Unknown Group";
-        const res = await axios.get(`${simsim}/teach?ask=${encodeURIComponent(ask)}&ans=${encodeURIComponent(ans)}&senderID=${senderID}&senderName=${encodeURIComponent(senderName)}&groupName=${encodeURIComponent(groupName)}`);
-        return message.reply(res.data.message || "Added successfully!");
+        const threadInfo = await threadsData.get(event.threadID);
+        const groupName = threadInfo?.threadName || "";
+        const teachUrl = `${simsim}/teach?ask=${encodeURIComponent(ask)}&ans=${encodeURIComponent(ans)}&senderID=${uid}&senderName=${encodeURIComponent(senderName)}&groupID=${encodeURIComponent(event.threadID)}&groupName=${encodeURIComponent(groupName)}`;
+        const res = await axios.get(teachUrl);
+        return api.sendMessage(res.data.message || "✅ Reply added successfully!", event.threadID);
       }
 
-      // 💬 সাধারণ চ্যাট
       const res = await axios.get(`${simsim}/simsimi?text=${encodeURIComponent(query)}&senderName=${encodeURIComponent(senderName)}`);
-      const responses = Array.isArray(res.data.response) ? res.data.response : [res.data.response];
-
-      for (const reply of responses) {
-        const sent = await message.reply(reply);
-        sent.addReplyEvent({
-          callback: "baby_reply",
-          author: senderID
+      const replies = Array.isArray(res.data.response) ? res.data.response : [res.data.response];
+      for (const reply of replies) {
+        await new Promise(resolve => {
+          api.sendMessage(reply, event.threadID, (err, info) => {
+            if (!err)
+              global.GoatBot.onReply.set(info.messageID, {
+                commandName: module.exports.config.name,
+                messageID: info.messageID,
+                author: uid
+              });
+            resolve();
+          });
         });
       }
-
-    } catch (err) {
-      return message.reply(`Error: ${err.message}`);
+    } catch (e) {
+      console.error(e);
+      return api.sendMessage(`❌ Error: ${e.message}`, event.threadID);
     }
   },
 
-  // 🧡 বটের মেসেজে রিপ্লাই করলে আবার উত্তর দেবে
-  onReply: async function({ message, event, Reply, usersData }) {
+  onReply: async function ({ api, event, usersData, Reply }) {
     try {
       const senderName = await usersData.getName(event.senderID);
-      const replyText = event.body ? event.body.toLowerCase() : "";
+      const replyText = event.body?.toLowerCase();
       if (!replyText) return;
       const res = await axios.get(`${simsim}/simsimi?text=${encodeURIComponent(replyText)}&senderName=${encodeURIComponent(senderName)}`);
-      const responses = Array.isArray(res.data.response) ? res.data.response : [res.data.response];
-      for (const reply of responses) {
-        const sent = await message.reply(reply);
-        sent.addReplyEvent({
-          callback: "baby_reply",
-          author: event.senderID
+      const replies = Array.isArray(res.data.response) ? res.data.response : [res.data.response];
+      for (const reply of replies) {
+        await new Promise(resolve => {
+          api.sendMessage(reply, event.threadID, (err, info) => {
+            if (!err)
+              global.GoatBot.onReply.set(info.messageID, {
+                commandName: module.exports.config.name,
+                messageID: info.messageID,
+                author: event.senderID
+              });
+            resolve();
+          });
         });
       }
-    } catch (err) {
-      message.reply(`Error: ${err.message}`);
+    } catch (e) {
+      console.error(e);
+      return api.sendMessage(`❌ Error in reply: ${e.message}`, event.threadID);
     }
   },
 
-  // 🐸 কেউ যদি "baby", "bot", "বেবি", "জান" বলে তখন র‍্যান্ডম রিপ্লাই
-  onChat: async function({ event, message, usersData }) {
+  onChat: async function ({ api, event, usersData }) {
     try {
-      const raw = event.body ? event.body.toLowerCase().trim() : "";
-      if (!raw) return;
-
+      const text = event.body?.toLowerCase()?.trim();
+      if (!text) return;
       const senderName = await usersData.getName(event.senderID);
-      const triggerWords = ["baby", "Baby", "bby", "jan", "xan", "জান", "বেবী", "বেবি"];
-      if (triggerWords.includes(raw)) {
-        const replies = [
-          "হুম? বলো 😺",
-          "শুনছি বেবি 😘",
-          "এতো ডেকো না, প্রেমে পড়ে যাবো 🙈",
-          "বলো জানু 💖",
-          "Achi jan",
-          "আমি ব্যস্ত আছি বসের সাথে 😎",
-          "Tomare valo lage🙈😘"
-        ];
-        const randomReply = replies[Math.floor(Math.random() * replies.length)];
-        return message.reply(`${randomReply} @${senderName}`, event.threadID, {
-          mentions: [{ tag: `@${senderName}`, id: event.senderID }]
-        });
+      const senderID = event.senderID;
+      const triggers = ["baby", "Baby", "bby", "beby", "Beby", "জান", "বেবী", "বেবি"];
+      const startsWithTrigger = triggers.some(t => text.startsWith(t + " "));
+      const isTriggerWord = triggers.includes(text);
+
+      if (isTriggerWord) {
+        const reply = ["Bolo baby 💬", "হুম? বলো 😺"][Math.floor(Math.random() * 2)];
+        return api.sendMessage(
+          { body: `${reply} @${senderName}`, mentions: [{ tag: `@${senderName}`, id: senderID }] },
+          event.threadID,
+          (err, info) => {
+            if (!err)
+              global.GoatBot.onReply.set(info.messageID, {
+                commandName: module.exports.config.name,
+                messageID: info.messageID,
+                author: event.senderID
+              });
+          }
+        );
       }
-    } catch (err) {
-      console.error(err);
+
+      if (startsWithTrigger) {
+        const query = text.replace(/^(baby|bot|bby|jan|xan|জান|বট|বেবি)\s+/i, "").trim();
+        if (!query) return;
+        const res = await axios.get(`${simsim}/simsimi?text=${encodeURIComponent(query)}&senderName=${encodeURIComponent(senderName)}`);
+        const replies = Array.isArray(res.data.response) ? res.data.response : [res.data.response];
+        for (const reply of replies) {
+          await new Promise(resolve => {
+            api.sendMessage(reply, event.threadID, (err, info) => {
+              if (!err)
+                global.GoatBot.onReply.set(info.messageID, {
+                  commandName: module.exports.config.name,
+                  messageID: info.messageID,
+                  author: event.senderID
+                });
+              resolve();
+            });
+          });
+        }
+      }
+    } catch (e) {
+      console.error(e);
     }
   }
 };
