@@ -2,12 +2,12 @@ const axios = require("axios");
 
 module.exports = {
   config: {
-    name: "ai_react_openai",
+    name: "ai_react",
     author: "SaGor",
     role: 0,
-    shortDescription: "OpenAI sentiment দ্বারা রিয়্যাকশন দেয়",
+    shortDescription: "AI দ্বারা প্রতিটি মেসেজে রিয়্যাকশন দেয়",
     longDescription:
-      "এই মডিউলটি OpenAI sentiment বিশ্লেষণ ব্যবহার করে প্রতিটি মেসেজে উপযুক্ত ইমোজি রিয়্যাকশন দেয়।",
+      "এই মডিউলটি প্রতিটি মেসেজের অর্থ বুঝে উপযুক্ত ইমোজি রিয়্যাকশন দেয়।",
     category: "AI",
     guide: "{pn}"
   },
@@ -17,53 +17,35 @@ module.exports = {
       const message = event.body;
       if (!message) return; // শুধু টেক্সট মেসেজে কাজ করবে
 
-      // তোমার OpenAI API key দাও এখানে
-      const OPENAI_API_KEY = "YOUR_OPENAI_API_KEY_HERE";
+      // AI দ্বারা মেসেজ বিশ্লেষণ করে রিয়্যাকশন নির্ধারণ
+      const prompt = `নিচের মেসেজটি দেখে বুঝে নাও কোন রিয়্যাকশন ইমোজি সবচেয়ে উপযুক্ত হবে।
+মেসেজ: "${message}"
+রিয়্যাকশন শুধুমাত্র একটি ইমোজি দাও যেমন: 😆, ❤️, 😮, 😢, 👍, 😡`;
 
-      // OpenAI API-কে মেসেজ পাঠানো
-      const prompt = `এই বাক্যের মুড বুঝে শুধুমাত্র একটি ইমোজি দিয়ে রিপ্লাই দাও (কোনো লেখা নয়)।
-বাক্য: "${message}"
-বেছে নাও শুধুমাত্র এইগুলোর মধ্য থেকে: 😆, ❤️, 😮, 😢, 👍, 😡`;
-
-      const response = await axios.post(
-        "https://api.openai.com/v1/chat/completions",
-        {
-          model: "gpt-4o-mini",
-          messages: [
-            { role: "system", content: "তুমি একটি sentiment emoji selector bot।" },
-            { role: "user", content: prompt }
-          ],
-          temperature: 0.2,
-          max_tokens: 10
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${OPENAI_API_KEY}`
-          }
-        }
+      const res = await axios.get(
+        `https://simsimi.cyberbot.top/api/v2/?text=${encodeURIComponent(prompt)}&lc=bn`
       );
 
-      let emoji = response.data.choices[0].message.content.trim();
-
-      // নিরাপদ fallback ইমোজি
-      const allowed = ["😆", "❤️", "😮", "😢", "👍", "😡"];
-      if (!allowed.includes(emoji)) {
-        if (message.match(/😂|🤣|হাসি|funny|মজা/i)) emoji = "😆";
-        else if (message.match(/ভালোবাসা|love|❤️|প্রেম/i)) emoji = "❤️";
-        else if (message.match(/দুঃখ|sad|cry|😢/i)) emoji = "😢";
-        else if (message.match(/wow|ওয়াও|অসাধারণ|চমৎকার/i)) emoji = "😮";
-        else if (message.match(/ধন্যবাদ|thank/i)) emoji = "👍";
-        else if (message.match(/রাগ|angry|😡|গালি/i)) emoji = "😡";
-        else emoji = "👍";
+      let aiReply = res.data.success || "";
+      // যদি AI অপ্রাসঙ্গিক কিছু বলে, তাহলে fallback emoji সেট করো
+      const emojis = ["😆", "❤️", "😮", "😢", "👍", "😡"];
+      if (!emojis.includes(aiReply.trim())) {
+        // AI সঠিক ইমোজি না দিলে নিজেই একটা অনুমান করো
+        if (message.match(/😂|🤣|হাসি|funny|মজা/i)) aiReply = "😆";
+        else if (message.match(/ভালোবাসা|love|❤️|প্রেম/i)) aiReply = "❤️";
+        else if (message.match(/দুঃখ|sad|cry|😢/i)) aiReply = "😢";
+        else if (message.match(/wow|ওয়াও|অসাধারণ|চমৎকার/i)) aiReply = "😮";
+        else if (message.match(/ধন্যবাদ|thank/i)) aiReply = "👍";
+        else if (message.match(/রাগ|angry|😡|গালি/i)) aiReply = "😡";
+        else aiReply = "👍";
       }
 
-      // রিয়্যাকশন পাঠাও
-      return api.setMessageReaction(emoji, event.messageID, (err) => {
+      // AI নির্ধারিত রিয়্যাকশন পাঠাও
+      return api.setMessageReaction(aiReply.trim(), event.messageID, (err) => {
         if (err) console.error("Reaction Error:", err);
       }, true);
     } catch (error) {
-      console.error("ai_react_openai error:", error);
+      console.error("ai_react error:", error);
     }
   },
 
