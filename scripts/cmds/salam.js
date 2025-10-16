@@ -17,7 +17,7 @@ module.exports = {
     const salamTriggers = [
       "assalamu alaikum",
       "assalamualaikum",
-      "সালাম",
+      "Assalamu alaikum",
       "আসসালামু আলাইকুম",
       "আসসালামুআলাইকুম"
     ];
