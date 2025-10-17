@@ -134,7 +134,7 @@ module.exports = {
       const isTriggerWord = triggers.includes(text);
 
       if (isTriggerWord) {
-        const reply = ["Bolo baby 💬", "হুম? বলো 😺"][Math.floor(Math.random() * 2)];
+        const reply = ["Bolo baby💬", "হুম? বলো😺"][Math.floor(Math.random() * 2)];
         return api.sendMessage(
           { body: `${reply} @${senderName}`, mentions: [{ tag: `@${senderName}`, id: senderID }] },
           event.threadID,
