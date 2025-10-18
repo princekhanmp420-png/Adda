@@ -20,7 +20,7 @@ module.exports = {
 
     let reply = "";
 
-    if (message.includes("Facebook Group link")) {
+    if (message.includes("Gc link")) {
       reply = `
 ╭━━━👥 𝐅𝐀𝐂𝐄𝐁𝐎𝐎𝐊 𝐆𝐑𝐎𝐔𝐏 👥━━━╮
 🔗 ${facebookGroup}
@@ -34,7 +34,7 @@ module.exports = {
 ╰━━🖤𝗙𝗢𝗟𝗟𝗢𝗪 𝗡𝗢𝗪💛━━━╯
 `;
     } 
-    else if (message.includes("Text Box link")) {
+    else if (message.includes("Message link")) {
       reply = `
 ╭━━━💬 𝐌𝐄𝐒𝐒𝐄𝐍𝐆𝐄𝐑 𝐆𝐑𝐎𝐔𝐏 💬━━━╮
 🔗 ${messengerGroup}
@@ -43,7 +43,7 @@ module.exports = {
     }
 
     // যদি শুধু "লিংক" বা "link" বলে, সবগুলোই দেখাবে
-    else if (message.includes("All box link") || message.includes("All box link")) {
+    else if (message.includes("All link") || message.includes("All box link")) {
       reply = `
 ╭━━━🌐 𝐎𝐅𝐅𝐈𝐂𝐈𝐀𝐋 𝐋𝐈𝐍𝐊𝐒 🌐━━━╮
 👥 Group: ${facebookGroup}
