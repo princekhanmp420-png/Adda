@@ -4,7 +4,8 @@ module.exports = {
     author: "SaGor",
     role: 0,
     shortDescription: "গ্রুপ, পেজ ও মেসেঞ্জার লিংক সুন্দর ডিজাইনসহ দেয় 💖",
-    longDescription: "যখন কেউ গ্রুপ, পেজ বা মেসেঞ্জার লিখবে, তখন বট ❤️ রিয়েক্ট সহ সুন্দর ডিজাইনে লিংক দিবে।",
+    longDescription:
+      "যখন কেউ গ্রুপ, পেজ বা মেসেঞ্জার সম্পর্কিত কিছু লিখবে, তখন বট ❤️ রিয়েক্টসহ সুন্দর ডিজাইনে লিংক পাঠাবে।",
     category: "info",
     guide: "{pn} group / page / messenger"
   },
@@ -20,7 +21,7 @@ module.exports = {
       messenger: "https://m.me/j/Abawo-69GGiHYihE/"
     };
 
-    // সুন্দর ডিজাইনের টেমপ্লেট 🎀
+    // 🌺 সুন্দর ডিজাইনের টেমপ্লেট
     const design = (title, link, emoji) => `
 ╔══✦❀ ${emoji} ❀✦══╗
    🌸 𝗢𝗙𝗙𝗜𝗖𝗜𝗔𝗟 ${title.toUpperCase()} 🌸
@@ -30,12 +31,12 @@ module.exports = {
 💖 ধন্যবাদ আমাদের ${title} ভিজিট করার জন্য 🌺
 ━━━━━━━━━━━━━━━━━━`;
 
-    // ❤️ রিয়েক্ট দেওয়ার ফাংশন
+    // ❤️ রিয়েক্ট ফাংশন
     const react = (emoji = "❤️") =>
       api.setMessageReaction(emoji, event.messageID, () => {}, true);
 
-    // কোন কীওয়ার্ডে কি পাঠাবে
-    if (message.includes("gc") || message.includes("Facebook gc")) {
+    // কীওয়ার্ড অনুযায়ী কাজ
+    if (message.includes("গ্রুপ") || message.includes("group") || message.includes("gc")) {
       react("💞");
       return api.sendMessage(
         design("Facebook Group", links.group, "👥"),
@@ -61,12 +62,12 @@ module.exports = {
     ) {
       react("💬");
       return api.sendMessage(
-        design("Message box", links.messenger, "Text box"),
+        design("Messenger Chat", links.messenger, "💬"),
         event.threadID,
         event.messageID
       );
     }
   },
 
-  onStart: async function({}) {}
+  onStart: async function() {}
 };
