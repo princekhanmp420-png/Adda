@@ -3,70 +3,106 @@ module.exports = {
     name: "social_links",
     author: "SaGor",
     role: 0,
-    shortDescription: "গ্রুপ, পেজ ও মেসেঞ্জার লিংক সুন্দর ডিজাইনসহ দেয় 💖",
+    shortDescription: "পেজ, গ্রুপ ও মেসেঞ্জার লিংক সুন্দর ডিজাইন ও বাটনসহ দেয় 💖",
     longDescription:
-      "যখন কেউ গ্রুপ, পেজ বা মেসেঞ্জার সম্পর্কিত কিছু লিখবে, তখন বট ❤️ রিয়েক্টসহ সুন্দর ডিজাইনে লিংক পাঠাবে।",
+      "শুধু যখন কেউ মেসেজের শুরুতেই ‘ফেসবুক গ্রুপের লিংক দাও’, ‘পেজের লিংক দাও’ বা ‘মেসেঞ্জার গ্রুপের লিংক দাও’ লিখবে, তখনই বট ❤️ রিয়েক্টসহ বাটনসহ লিংক পাঠাবে। মাঝখানে বা শেষে লিখলে কিছু বলবে না।",
     category: "info",
-    guide: "{pn} group / page / messenger"
+    guide: "{pn} ফেসবুক গ্রুপের লিংক দাও / পেজের লিংক দাও / মেসেঞ্জার গ্রুপের লিংক দাও"
   },
 
   onChat: async function({ api, event }) {
-    const message = event.body?.toLowerCase();
+    const message = event.body?.toLowerCase().trim();
     if (!message) return;
 
-    // এখানে তোমার নিজস্ব লিংকগুলো বসাও 👇
+    // 🔗 তোমার লিংকগুলো নিচে দাও
     const links = {
       group: "https://facebook.com/groups/islamik.life1/",
       page: "https://www.facebook.com/Islamic.Fundation",
       messenger: "https://m.me/j/Abawo-69GGiHYihE/"
     };
 
-    // 🌺 সুন্দর ডিজাইনের টেমপ্লেট
-    const design = (title, link, emoji) => `
+    // ❤️ রিয়েক্ট ফাংশন
+    const react = (emoji = "❤️") =>
+      api.setMessageReaction(emoji, event.messageID, () => {}, true);
+
+    // 🎨 সুন্দর ডিজাইনের টেক্সট
+    const design = (title, emoji) => `
 ╔══✦❀ ${emoji} ❀✦══╗
-   🌸 𝗢𝗙𝗙𝗜𝗖𝗜𝗔𝗟 ${title.toUpperCase()} 🌸
+🌸 𝗢𝗙𝗙𝗜𝗖𝗜𝗔𝗟 ${title.toUpperCase()} 🌸
 ╚══✦❀ ${emoji} ❀✦══╝
-🔗 ${link}
 ━━━━━━━━━━━━━━━━━━
 💖 ধন্যবাদ আমাদের ${title} ভিজিট করার জন্য 🌺
 ━━━━━━━━━━━━━━━━━━`;
 
-    // ❤️ রিয়েক্ট ফাংশন
-    const react = (emoji = "❤️") =>
-      api.setMessageReaction(emoji, event.messageID, () => {}, true);
-
-    // কীওয়ার্ড অনুযায়ী কাজ
-    if (message.includes("গ্রুপ") || message.includes("group") || message.includes("gc")) {
-      react("💞");
+    // ✅ শুধুমাত্র মেসেজের শুরুতে নির্দিষ্ট বাক্য মিলবে
+    if (
+      message.startsWith("ফেসবুক গ্রুপ") ||
+      message.startsWith("group") ||
+      message.startsWith("gc group")
+    ) {
+      react("👥");
       return api.sendMessage(
-        design("Facebook Group", links.group, "👥"),
-        event.threadID,
-        event.messageID
-      );
-    }
-
-    if (message.includes("পেজ") || message.includes("page")) {
-      react("🌸");
-      return api.sendMessage(
-        design("Facebook Page", links.page, "📘"),
+        {
+          body: design("Facebook Group", "👥"),
+          attachment: null,
+          buttons: [
+            {
+              type: "web_url",
+              url: links.group,
+              title: "🔗 গ্রুপে যেতে ক্লিক করুন"
+            }
+          ]
+        },
         event.threadID,
         event.messageID
       );
     }
 
     if (
-      message.includes("মেসেঞ্জার") ||
-      message.includes("messenger") ||
-      message.includes("চ্যাট") ||
-      message.includes("chat")
+      message.startsWith("পেজ") ||
+      message.startsWith("page") ||
+      message.startsWith("facebook page")
     ) {
-      react("💬");
+      react("📘");
       return api.sendMessage(
-        design("Messenger Chat", links.messenger, "💬"),
+        {
+          body: design("Facebook Page", "📘"),
+          buttons: [
+            {
+              type: "web_url",
+              url: links.page,
+              title: "🔗 পেজে যেতে ক্লিক করুন"
+            }
+          ]
+        },
         event.threadID,
         event.messageID
       );
     }
+
+    if (
+      message.startsWith("মেসেঞ্জার গ্রুপ") ||
+      message.startsWith("messenger‌ box") ||
+      message.startsWith("text box")
+    ) {
+      react("💬");
+      return api.sendMessage(
+        {
+          body: design("Messenger Group", "💬"),
+          buttons: [
+            {
+              type: "web_url",
+              url: links.messenger,
+              title: "🔗 মেসেঞ্জারে যেতে ক্লিক করুন"
+            }
+          ]
+        },
+        event.threadID,
+        event.messageID
+      );
+    }
+
+    // ❌ অন্য কোনো অবস্থায় কিছু বলবে না
   },
 
   onStart: async function() {}
