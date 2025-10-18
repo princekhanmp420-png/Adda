@@ -20,21 +20,21 @@ module.exports = {
 
     let reply = "";
 
-    if (message.includes("Facebook Group")) {
+    if (message.includes("Facebook Group link")) {
       reply = `
 ╭━━━👥 𝐅𝐀𝐂𝐄𝐁𝐎𝐎𝐊 𝐆𝐑𝐎𝐔𝐏 👥━━━╮
 🔗 ${facebookGroup}
 ╰━━━💙𝗝𝗢𝗜𝗡𝗘 𝗡𝗢𝗪💙━━━╯
 `;
     } 
-    else if (message.includes("Page")) {
+    else if (message.includes("Page link")) {
       reply = `
 ╭━━━📄 𝐅𝐀𝐂𝐄𝐁𝐎𝐎𝐊 𝐏𝐀𝐆𝐄 📄━━━╮
 🔗 ${facebookPage}
 ╰━━🖤𝗙𝗢𝗟𝗟𝗢𝗪 𝗡𝗢𝗪💛━━━╯
 `;
     } 
-    else if (message.includes("Text Box")) {
+    else if (message.includes("Text Box link")) {
       reply = `
 ╭━━━💬 𝐌𝐄𝐒𝐒𝐄𝐍𝐆𝐄𝐑 𝐆𝐑𝐎𝐔𝐏 💬━━━╮
 🔗 ${messengerGroup}
@@ -43,7 +43,7 @@ module.exports = {
     }
 
     // যদি শুধু "লিংক" বা "link" বলে, সবগুলোই দেখাবে
-    else if (message.includes("All BOX link") || message.includes("ALL BOX link")) {
+    else if (message.includes("All box link") || message.includes("All box link")) {
       reply = `
 ╭━━━🌐 𝐎𝐅𝐅𝐈𝐂𝐈𝐀𝐋 𝐋𝐈𝐍𝐊𝐒 🌐━━━╮
 👥 Group: ${facebookGroup}
