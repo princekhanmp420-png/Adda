@@ -20,36 +20,36 @@ module.exports = {
 
     let reply = "";
 
-    if (message.includes("Facebook link")) {
+    if (message.includes("Facebook Group")) {
       reply = `
 ╭━━━👥 𝐅𝐀𝐂𝐄𝐁𝐎𝐎𝐊 𝐆𝐑𝐎𝐔𝐏 👥━━━╮
 🔗 ${facebookGroup}
-╰━━━💙সবাই জয়েন হয়ে যাও💙━━━╯
+╰━━━💙𝗝𝗢𝗜𝗡𝗘 𝗡𝗢𝗪💙━━━╯
 `;
     } 
-    else if (message.includes("Page link")) {
+    else if (message.includes("Page")) {
       reply = `
 ╭━━━📄 𝐅𝐀𝐂𝐄𝐁𝐎𝐎𝐊 𝐏𝐀𝐆𝐄 📄━━━╮
 🔗 ${facebookPage}
-╰━━🖤ফলো করুন💛━━━╯
+╰━━🖤𝗙𝗢𝗟𝗟𝗢𝗪 𝗡𝗢𝗪💛━━━╯
 `;
     } 
-    else if (message.includes("Box link")) {
+    else if (message.includes("Text Box")) {
       reply = `
 ╭━━━💬 𝐌𝐄𝐒𝐒𝐄𝐍𝐆𝐄𝐑 𝐆𝐑𝐎𝐔𝐏 💬━━━╮
 🔗 ${messengerGroup}
-╰━━━💜সবাই জয়েন হয়ে যাও💜━━━╯
+╰━━━💜𝗧𝗘𝗫𝗧 𝗡𝗢𝗪💜━━━╯
 `;
     }
 
     // যদি শুধু "লিংক" বা "link" বলে, সবগুলোই দেখাবে
-    else if (message.includes("All link") || message.includes("link")) {
+    else if (message.includes("All BOX link") || message.includes("ALL BOX link")) {
       reply = `
 ╭━━━🌐 𝐎𝐅𝐅𝐈𝐂𝐈𝐀𝐋 𝐋𝐈𝐍𝐊𝐒 🌐━━━╮
 👥 Group: ${facebookGroup}
 📄 Page: ${facebookPage}
 💬 Messenger: ${messengerGroup}
-╰🥰সবগুলাই ইসলামিক কাজে পরিচালিত💖━━━╯
+╰🥰𝗔𝗟𝗟 𝗜𝗦𝗟𝗔𝗠𝗜𝗖 𝗕𝗢𝗫💖━━━╯
 `;
     }
 
