@@ -22,13 +22,13 @@ module.exports = {
     let reply = "";
 
     // ✅ শুধু শুরুতে লিখলে রিপ্লাই দিবে
-    if (message.startsWith("Page")) {
+    if (message.startsWith("page")) {
       reply = `🌐 **ফেসবুক পেজের লিংক:**\n${facebookPage}`;
     } 
     else if (message.startsWith("gc")) {
       reply = `👥 **ফেসবুক গ্রুপের লিংক:**\n${facebookGroup}`;
     } 
-    else if (message.startsWith("Text")) {
+    else if (message.startsWith("text")) {
       reply = `💬 **মেসেঞ্জার গ্রুপের লিংক:**\n${messengerGroup}`;
     } 
     else {
