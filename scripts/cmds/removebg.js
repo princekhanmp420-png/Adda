@@ -6,7 +6,7 @@ const FormData = require("form-data");
 module.exports = {
   config: {
     name: "removebg",
-    aliases: ["bgremove", "rmbg"],
+    aliases: ["rimovbg", "rmbg"],
     version: "1.0",
     author: "SaGor",
     role: 0,
