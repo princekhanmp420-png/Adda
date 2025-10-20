@@ -22,7 +22,7 @@ module.exports = {
     });
 
     const link = [
-      "h",// video credits xenoz (youtube)
+      "https://drive.google.com/file/d/1GniqfzpbWjfXMxn8611aGn9xs400rotQ/view?usp=drivesdk",// video credits xenoz (youtube)
   
       // Add more video links here
     ];
