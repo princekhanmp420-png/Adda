@@ -22,7 +22,8 @@ module.exports = {
     });
 
     const link = [
-      "https://drive.google.com/file/d/1GniqfzpbWjfXMxn8611aGn9xs400rotQ/view?usp=drivesdk",// video credits xenoz (youtube)
+      "https://drive.google.com/file/d/1GniqfzpbWjfXMxn8611aGn9xs400rotQ/view?usp=drivesdk",
+      "https://drive.google.com/file/d/1_OoujeLp0f99z75MQkx9pdJLi9nTihU3/view?usp=drivesdk"// video credits xenoz (youtube)
   
       // Add more video links here
     ];
